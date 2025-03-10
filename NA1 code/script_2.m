@@ -17,3 +17,4 @@ x = linspace(0,10,1000);
 y = logspace(0,20,1000);
 
 [q,input] = cartesian_output_2_kin_stateInput(x,y,T_SIMULATION);
+%test
