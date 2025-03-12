@@ -1,5 +1,17 @@
-function [q,v,w] = fnc(q,v,w)
+function [q,v,w] = fnc(qi, qf, s, s_dot)
+zi = [qi(3);
+    qi(1)*cos(qi(3)) + qi(2)*sin(qi(3));
+    qi(1)*sin(qi(3)) - qi(2)*cos(qi(3));
+    ];
 
+zf = [qf(3);
+    qf(1)*cos(qf(3)) + qf(2)*sin(qf(3));
+    qf(1)*sin(qf(3)) - qf(2)*cos(qf(3));
+    ];
+
+if(zi(1)==zf(1))
+    zf(1) = zi(1) + (2*pi);
+end
 
 end
 
@@ -26,8 +38,8 @@ qi = [3,3,-pi/3]';
 qf = [4,4,pi/3]';
 % qi = [0,0,-pi/3]';
 % qf = [1,1,pi/3]';
-
-function [zi,zf] = fcn(qi,qf) 
+function [q , v, w] = fcn(s, s_dot, qi, qf)
+for (i = 0:s_dot:s)
 zi = [qi(3);
     qi(1)*cos(qi(3)) + qi(2)*sin(qi(3));
     qi(1)*sin(qi(3)) - qi(2)*cos(qi(3));
@@ -41,9 +53,6 @@ zf = [qf(3);
 if(zi(1)==zf(1))
     zf(1) = zi(1) + (2*pi);
 end
-end
-
-function [v , omega] = fcn(s, s_dot, qi, qf)
 
 a = [zf(1),zi(1)];
 b = [zf(3) , zi(3) , zf(2)*(zf(1)-zi(1)) - 3*zf(3) , zi(2)*(zf(1)-zi(1)) + 3*zi(3)];
@@ -60,9 +69,11 @@ z2 = z3_dot/z1_dot;
 z2_dot = (z3_ddot)/((a(1) - a(2)));
 
 
-omega = (zf(1)-zi(1))*s_dot;
-%v = ((zf(1)-zi(1))*z3+(z3_ddot/z1_dot))*s_dot;
+omega(i) = (zf(1)-zi(1))*s_dot;
+v(i) = ((zf(1)-zi(1))*z3+z2_dot)*s_dot;
 
-
-v = ((zf(1)-zi(1))*z3+z2_dot)*s_dot;
+q(i) = [qi(1)+v*cos(q(3) + omega/s_dot);
+    qi(2)+v*sin(q(3) + omega/s_dot);
+    q(3) + omega/s_dot]
+end
 end
