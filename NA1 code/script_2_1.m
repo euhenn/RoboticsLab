@@ -1,7 +1,8 @@
 clear all;
 close all;
 addpath(genpath('utils'));
-addpath("cartesian_part2\")
+addpath("cartesian_part2\");
+
 %% Set simulation parameters
 r = 0.03;
 d = 0.165;
@@ -14,15 +15,18 @@ OMEGA_R = 1;
 
 %%  2
 % scuffed timing law:
+addpath("part2\TimeLaw\");%call time law function
 Ts = 0.01;
-s = linspace(Ts, 1, 1/Ts)
+Tlen=10;%time duration in sec
+t=0:Ts:Tlen;%build time vector
+[s,s_dot] = time_law_fn(t,Tlen,1);
 
 %%
 addpath("cartesian_part2\")
 x = linspace(0,10,1000);
 y = logspace(0,20,1000);
 
-[q,input] = cartesian_output_2_kin_stateInput(x,y,s);
+%[q,input] = cartesian_output_2_kin_stateInput(x,y,y_dot,x_ddot,y_ddot);
 %test
 
 
@@ -33,11 +37,10 @@ qf = [1; 1; pi/2];
 ki = 1;
 kf = 2;
 
-
-[x, y] = cartesian_polyn(qi, qf, s, ki, kf);
-[q, input] = cartesian_output_2_kin_stateInput(x, y, s);
+[x, y, x_dot,y_dot,x_ddot,y_ddot] = cartesian_polyn(qi, qf, s, ki, kf);
+[q, input] = cartesian_output_2_kin_stateInput(x, y, x_dot,y_dot,x_ddot,y_ddot);
 close all;
-plot_unicycle_2D(q, s)
+plot_unicycle_2D(q, 100)
 
 %% 2.1.2
 
@@ -48,7 +51,7 @@ ki = 1;
 kf = 5;
 
 
-[x, y] = cartesian_polyn(qi, qf, s, ki, kf);
-[q, input] = cartesian_output_2_kin_stateInput(x, y, 1);
+[x, y, x_dot,y_dot,x_ddot,y_ddot] = cartesian_polyn(qi, qf, s, ki, kf);
+[q, input] = cartesian_output_2_kin_stateInput(x, y, x_dot,y_dot,x_ddot,y_ddot);
 close all;
-plot_unicycle_2D(q, Ts)
+plot_unicycle_2D(q, 100)
