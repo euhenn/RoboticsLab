@@ -19,7 +19,8 @@ addpath("part2\TimeLaw\");%call time law function
 Ts = 0.01;
 Tlen=10;%time duration in sec
 t=0:Ts:Tlen;%build time vector
-[s,s_dot] = time_law_fn(t,Tlen,1);
+[s,s_dot] = time_law_fn(t,Tlen,2);
+
 
 %%
 addpath("cartesian_part2\")
@@ -38,6 +39,7 @@ ki = 1;
 kf = 2;
 
 [x, y, x_dot,y_dot,x_ddot,y_ddot] = cartesian_polyn(qi, qf, s, ki, kf);
+
 [q, input] = cartesian_output_2_kin_stateInput(x, y, x_dot,y_dot,x_ddot,y_ddot);
 close all;
 plot_unicycle_2D(q, 100)
