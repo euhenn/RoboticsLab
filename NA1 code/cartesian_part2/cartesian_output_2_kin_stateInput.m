@@ -1,12 +1,12 @@
-function [q, input] = cartesian_output_2_kin_stateInput(x,y,T_SIMULATION)
+function [q, input] = cartesian_output_2_kin_stateInput(x,y,s)
 % cartesian flat outputs are x,y
 % state: x, y, theta 
 % input: v, w
 
 % first: calculate x_dot, y_dot, x_ddot, y_ddot with gradient()
 %it does not see T_SIMULATION
-dim = size(x,2)
-t = T_SIMULATION/dim;
+dim = length(s);
+t = 1/dim;
 x_dot = gradient(x,t);
 y_dot = gradient(y,t);
 x_ddot = gradient(x_dot,t);

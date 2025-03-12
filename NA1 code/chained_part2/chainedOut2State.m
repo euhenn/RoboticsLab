@@ -1,4 +1,4 @@
-function [x, y] = chainedOut2State(z1, z3, T_SIMULATION)
+function [z, v1, v2] = chainedOut2State(z1, z3, T_SIMULATION)
 % from chained flat output to input/state
 
 % per la derivata farla offline è meglio, calcolarla a mano in funzione di
@@ -23,5 +23,5 @@ z3_ddot = gradient(z3_dot,t);
 
 v2 = (z1_ddot.*z3_dot + z1_dot.*z3_ddot)./(v1.^2);
 
-
+z = [z1;z2;z3];
 end
