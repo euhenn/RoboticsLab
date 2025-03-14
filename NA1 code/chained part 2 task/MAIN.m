@@ -1,79 +1,20 @@
-function [q,v,w] = fnc(qi, qf, s, s_dot)
-zi = [qi(3);
-    qi(1)*cos(qi(3)) + qi(2)*sin(qi(3));
-    qi(1)*sin(qi(3)) - qi(2)*cos(qi(3));
-    ];
+clear all;
+close all;
 
-zf = [qf(3);
-    qf(1)*cos(qf(3)) + qf(2)*sin(qf(3));
-    qf(1)*sin(qf(3)) - qf(2)*cos(qf(3));
-    ];
-
-if(zi(1)==zf(1))
-    zf(1) = zi(1) + (2*pi);
-end
-
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%% FUNCTION FOR POINT 4
 % MAIN PARAMETERS AND VALUES
-total_time = 100;
-qi = [3,3,-pi/3]';
-qf = [4,4,pi/3]';
+total_time = 10;
+Ts = 0.01;
+qi = [0,0,-pi/3]';
+qf = [1,1,pi/3]';
 % qi = [0,0,-pi/3]';
 % qf = [1,1,pi/3]';
-function [q , v, w] = fcn(s, s_dot, qi, qf)
-for (i = 0:s_dot:s)
-zi = [qi(3);
-    qi(1)*cos(qi(3)) + qi(2)*sin(qi(3));
-    qi(1)*sin(qi(3)) - qi(2)*cos(qi(3));
-    ];
 
-zf = [qf(3);
-    qf(1)*cos(qf(3)) + qf(2)*sin(qf(3));
-    qf(1)*sin(qf(3)) - qf(2)*cos(qf(3));
-    ];
+%run the simulink for chained
+% sim("simulink_template_2_3.slx");
+% run("simulink_template_2_3.slx");
 
-if(zi(1)==zf(1))
-    zf(1) = zi(1) + (2*pi);
-end
-
-a = [zf(1),zi(1)];
-b = [zf(3) , zi(3) , zf(2)*(zf(1)-zi(1)) - 3*zf(3) , zi(2)*(zf(1)-zi(1)) + 3*zi(3)];
-
-
-z1 = a(1)*s - a(2)*(s-1);
-z1_dot = a(1) - a(2);
-
-z3 = b(1)*(s^3) - b(2)*((s-1)^3) + b(3)*(s-1)*(s^2) + b(4)*s*((s-1)^2);
-z3_dot = b(1)*(s^2)*3 - b(2)*((s-1)^2)*3 + b(3)*(s^2 + 2*(s-1)*s) + b(4)*((s-1)^2 + s*2*(s-1));
-z3_ddot = b(1)*(s)*6 - b(2)*((s-1))*6 + b(3)*(s*2 + 2*(s*2-1)) + b(4)*((s-1)*2 + 2*(s*2-1));
-
-z2 = z3_dot/z1_dot;
-z2_dot = (z3_ddot)/((a(1) - a(2)));
-
-
-omega(i) = (zf(1)-zi(1))*s_dot;
-v(i) = ((zf(1)-zi(1))*z3+z2_dot)*s_dot;
-
-q(i) = [qi(1)+v*cos(q(3) + omega/s_dot);
-    qi(2)+v*sin(q(3) + omega/s_dot);
-    q(3) + omega/s_dot]
-end
-end
+%run the films animation
+[s,s_dot] = time_law_fn(total_time,1,Ts);
+[z,z_dot] = from_qiqf_to_chain(qi,qf,total_time,s_dot,s,Ts);
+[q,u] = from_traj_to_kinem(z,z_dot,total_time,s_dot,Ts);
+animate_unicycle_2D(q,Ts,1);
