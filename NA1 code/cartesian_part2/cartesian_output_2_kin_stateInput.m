@@ -20,7 +20,7 @@ function [q, input] = cartesian_output_2_kin_stateInput(x,y,x_dot,y_dot,x_ddot,y
     v = sqrt(y_dot.^2 + x_dot.^2);
     
     % omega
-    w = (x_dot.*y_ddot - y_dot.*x_ddot)./v;
+    w = (x_dot.*y_ddot - y_dot.*x_ddot)./(y_dot.^2 + x_dot.^2);
     
     q = [x; y; theta];
     input = [v; w];
