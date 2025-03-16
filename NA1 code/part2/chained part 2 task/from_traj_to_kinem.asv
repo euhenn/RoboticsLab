@@ -16,15 +16,12 @@ for i = 1:1:total_time/Ts
     
     %we can compute the state 
     q(:,i) = q2z\z;
-    % q(1,i) = (z(2) - z(2)*(sin(z(1)))^2 + z(3)*sin(z(1))*cos(z(1)))/cos(z(1));
-    % q(2,i) = z(2)*sin(z(1)) - z(3)*cos(z(1));
-    % q(3,i) = z(1);
-
     
     %we can compute the input
     omega = z_dot(1)*s_dot(i);
-    v = (z_dot(2) + omega*z(3))*s_dot(i);
+    v = (z_dot(2) + z_dot(1)*z(3))*s_dot(i);
     u(:,i) = [v;omega];
 
+    q_dot = []
 end
 end

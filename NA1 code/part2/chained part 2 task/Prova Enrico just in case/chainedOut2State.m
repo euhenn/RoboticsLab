@@ -1,4 +1,4 @@
-function [z, v1, v2] = chainedOut2State(z1, z3, T_SIMULATION)
+rfunction [z, v1, v2] = chainedOut2State(z1, z3, T_SIMULATION)
 % from chained flat output to input/state
 
 % per la derivata farla offline è meglio, calcolarla a mano in funzione di

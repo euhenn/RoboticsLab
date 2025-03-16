@@ -1,28 +1,28 @@
 %need do pass the total time by the sampling frequency
 
-function [z,z_dot] = from_qiqf_to_chain(qi, qf, total_time, s_dot, s, Ts)
+function [z,z_dot] = from_qiqf_to_chain(qi, qf, total_time, s_dot, s_tot, Ts)
 z = zeros(3,total_time/Ts);
 z_dot = zeros(3,total_time/Ts);
 
 %initial condition transformation
 zi = [qi(3);
-    (qi(1)-qi(1))*cos(qi(3)) + (qi(2)-qi(2))*sin(qi(3));
-    (qi(1)-qi(1))*sin(qi(3)) - (qi(2)-qi(2))*cos(qi(3));
+    (qi(1))*cos(qi(3)) + (qi(2))*sin(qi(3));
+    (qi(1))*sin(qi(3)) - (qi(2))*cos(qi(3));
     ];
 zf = [qf(3);
-    (qf(1) - qi(1))*cos(qf(3)) + (qf(2) - qi(1))*sin(qf(3));
-    (qf(1) - qi(1))*sin(qf(3)) - (qf(2) - qi(1))*cos(qf(3))
+    (qf(1))*cos(qf(3)) + (qf(2))*sin(qf(3));
+    (qf(1))*sin(qf(3)) - (qf(2))*cos(qf(3))
     ];
 
 %to avoid straight trajectory problem
-if(zi(1)==zf(1))
-    zf(1) = zi(1) + (2*pi);
-end
+% if(zi(1)==zf(1))
+%     zf(1) = zi(1) + (2*pi);
+% end
 
 %coefficients of the polynom
-a = [zf(1),zi(1)];
-b = [zf(3) , zi(3) , zf(2)*(zf(1)-zi(1)) - 3*zf(3) , zi(2)*(zf(1)-zi(1)) + 3*zi(3)];
-
+a = [zf(1),zi(1)]';
+b = [zf(3) , zi(3) , zf(2)*(zf(1)-zi(1)) - 3*zf(3) , zi(2)*(zf(1)-zi(1)) + 3*zi(3)]';
+s = s_tot/total_time;
 for i = 1:1:total_time/Ts
     z1 = a(1)*s(i) - a(2)*(s(i)-1);
     z1_dot = a(1) - a(2);
