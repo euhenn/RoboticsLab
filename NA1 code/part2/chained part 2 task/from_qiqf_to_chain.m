@@ -6,12 +6,12 @@ z_dot = zeros(3,total_time/Ts);
 
 %initial condition transformation
 zi = [qi(3);
-    (qi(1)-qi(1))*cos(qi(3)) + (qi(2)-qi(2))*sin(qi(3));
-    (qi(1)-qi(1))*sin(qi(3)) - (qi(2)-qi(2))*cos(qi(3));
+    qi(1)*cos(qi(3)) + qi(2)*sin(qi(3));
+    qi(1)*sin(qi(3)) - qi(2)*cos(qi(3));
     ];
 zf = [qf(3);
-    (qf(1) - qi(1))*cos(qf(3)) + (qf(2) - qi(1))*sin(qf(3));
-    (qf(1) - qi(1))*sin(qf(3)) - (qf(2) - qi(1))*cos(qf(3))
+    qf(1)*cos(qf(3)) + qf(2)*sin(qf(3));
+    qf(1)*sin(qf(3)) - qf(2)*cos(qf(3))
     ];
 
 %to avoid straight trajectory problem

@@ -3,6 +3,7 @@ function plot_unicycle_2D(q, downsampling)
 % downsampling: useful to reduce the unicycle plot
 
 % plot the trajectory
+figure(1);
 plot(q(1,:),q(2,:), 'k--');
 hold on
 xlabel('x');
@@ -44,4 +45,5 @@ else
     end
 end
 axis square
+saveas(figure(1),"sad");
 end
