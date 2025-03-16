@@ -8,6 +8,9 @@ x_0 = 1;
 y_0 = 1;
 theta_0 = 0;
 
+%% run sim
+out=sim("Experiment1_optional_simulink.slx");
+
 %% Plotting 
 
 time = out.q.time(:,1);

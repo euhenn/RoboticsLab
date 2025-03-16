@@ -66,7 +66,8 @@ function [y] = planTrajectoryChainedForm(q_i, q_f, reorientation)
     y(2,4) = z_i(2) * (z_f(1) - z_i(1)) - 3 * z_i(3);
 
 end
-
+%% simulating
+out=sim("Experiment2_optional_simulink.slx");
 
 %% Plotting
 time = out.q.time(:,1);
