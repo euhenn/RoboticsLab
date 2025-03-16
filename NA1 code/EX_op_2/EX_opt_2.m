@@ -74,6 +74,9 @@ time = out.q.time(:,1);
 x = out.q.signals(1).values;
 y = out.q.signals(2).values;
 theta = out.q.signals(3).values;
+q=[x';y';theta'];
+
+plot_unicycle_2D(q, 200)
 
 figure;
 subplot(2,2,1);
