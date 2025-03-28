@@ -70,7 +70,7 @@ delta_theta_cal_hat = Y_cal_hat(2*N_samples+1:3*N_samples);
 % plot X estimates
 figure()
 subplot(3,1,1)
-plot(t(2:end), delta_X, 'LineWidth', 3, 'Color','k')
+plot(t(2:end), delta_X, 'LineWidth', 3, 'Color','g')
 xlim([0,t(end)])
 hold on
 grid on
@@ -87,7 +87,7 @@ std_X = std(delta_X);
 
 % plot Y estimates
 subplot(3,1,2)
-plot(t(2:end), delta_Y, 'LineWidth', 3, 'Color','k')
+plot(t(2:end), delta_Y, 'LineWidth', 3, 'Color','g')
 xlim([0,t(end)])
 hold on
 grid on
@@ -104,7 +104,7 @@ std_Y = std(delta_Y);
 
 % plot theta estimates
 subplot(3,1,3)
-plot(t(2:end), delta_theta, 'LineWidth', 3, 'Color','k')
+plot(t(2:end), delta_theta, 'LineWidth', 3, 'Color','g')
 xlim([0,t(end)])
 hold on
 grid on
