@@ -17,13 +17,24 @@ q_off = [0.1,0.1,0.3]';
 run("Localization.mlx")
 sim("Sim_localization_template.slx");
 
+%%
+
 q4id = reshape(q4id,3,length(q4id(1,1,:)));
 q4id = q4id';
 omega_wheels = reshape(omega_wheels,2,length(omega_wheels(1,1,:)));
 omega_wheels=omega_wheels';
 t = tout(:,1);
 N_samples = size(q4id, 1) - 1;
-
+%%
+figure()
+subplot(2,1,1)
+plot(q4id(:,2), q4id(:,1), 'LineWidth', 3, 'Color','k')
+grid on;
+subplot(2,1,2)
+plot(t(2:end), omega_wheels(2:end,1), 'LineWidth', 3, 'Color','b')
+hold on
+plot(t(2:end), omega_wheels(2:end,2), 'LineWidth', 3, 'Color','r')
+grid on;
 
 %% Test identification without calibration
 % get the regression matrix and output

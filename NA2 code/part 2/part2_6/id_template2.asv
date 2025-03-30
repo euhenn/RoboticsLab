@@ -7,7 +7,7 @@ r_nominal = 0.03;
 d_nominal = 0.165;
 w_nominal = [r_nominal;r_nominal/d_nominal];
 
-q_off = [0.1,0.1,0.3]';
+q_off = [0.0,0.0,0.0]';
 
 %% Load and plot signals
 % load from a simulation:
@@ -15,7 +15,12 @@ q_off = [0.1,0.1,0.3]';
 % omega_wheels: [N,2] matrix with omega_L and omega_R
 % t: time
 run("Localization.mlx")
-sim("Sim_localization_template.slx");
+%   Planning the input using nominal values
+r_used = r_nominal;
+d_used = d_nominal;
+sim("Sim_localization_template2.slx");
+
+%%
 
 q4id = reshape(q4id,3,length(q4id(1,1,:)));
 q4id = q4id';
@@ -23,7 +28,16 @@ omega_wheels = reshape(omega_wheels,2,length(omega_wheels(1,1,:)));
 omega_wheels=omega_wheels';
 t = tout(:,1);
 N_samples = size(q4id, 1) - 1;
-
+%%
+figure()
+subplot(2,1,1)
+plot(q4id(:,2), q4id(:,1), 'LineWidth', 1, 'Color','k')
+grid on;
+subplot(2,1,2)
+plot(t(2:end), omega_wheels(2:end,1), 'LineWidth', 1, 'Color','b')
+hold on
+plot(t(2:end), omega_wheels(2:end,2), 'LineWidth', 1, 'Color','r')
+grid on;
 
 %% Test identification without calibration
 % get the regression matrix and output
@@ -119,3 +133,32 @@ E_theta = delta_theta-delta_theta_cal_hat;
 mean_E_theta = mean(E_theta);
 std_E_theta = std(E_theta);
 std_theta = std(delta_theta);
+
+
+
+%%  2.6.a
+% simulate the system again, but now plan inputs using:
+%   r and d from identification
+
+% run("Localization.mlx")
+%   Planning the input using r and d from identification
+r_used = r_unconstrained_hat;
+d_used = d_unconstrained_hat;
+sim("Sim_localization_template2.slx");
+
+q4id = reshape(q4id,3,length(q4id(1,1,:)));
+q4id = q4id';
+omega_wheels = reshape(omega_wheels,2,length(omega_wheels(1,1,:)));
+omega_wheels=omega_wheels';
+t = tout(:,1);
+N_samples = size(q4id, 1) - 1;
+%%
+figure()
+subplot(2,1,1)
+plot(q4id(:,2), q4id(:,1), 'LineWidth', 1, 'Color','k')
+grid on;
+subplot(2,1,2)
+plot(t(2:end), omega_wheels(2:end,1), 'LineWidth', 1, 'Color','b')
+hold on
+plot(t(2:end), omega_wheels(2:end,2), 'LineWidth', 1, 'Color','r')
+grid on;
