@@ -1,0 +1,74 @@
+clear all;
+close all;
+addpath("methods\");
+%%
+%nominal parameters
+r_nom = 0.03;
+d_nom = 0.165;
+omega_max = 10;
+
+%time
+Ts = 0.04;
+total_time = 35;
+t = 0:Ts:total_time;
+Ta = 1;
+Tc = 30;
+
+%trajectory
+R = 0.4;
+omega_trj = 2*pi;
+mode = 2;           
+[s, s_dot] = time_law_fn(t,total_time,mode,Ta,Tc);
+
+%% Get an eight-shaped geometric path (1.1)
+
+%trajectory
+x=R*sin(2*omega_trj.*s);
+y=R*sin(omega_trj.*s);
+
+%trajectory analitic derivatives
+x_dot = R*2*omega_trj*cos(2*omega_trj*s);
+y_dot = R*omega_trj*cos(omega_trj*s);
+
+x_ddot = R*4*omega_trj*omega_trj*(-sin(2*omega_trj*s));
+y_ddot = R*omega_trj*omega_trj*(-sin(omega_trj*s));
+
+% %% simulation
+% sim("robot_LAB__1_3.slx");
+
+%   v
+v = s_dot.*sqrt(y_dot.^2 + x_dot.^2);
+
+%   omega
+w = s_dot.*(x_dot.*y_ddot - y_dot.*x_ddot)/(y_dot.^2 + x_dot.^2);
+
+
+omega_L = (2*v - d_nom*w) ./ (2*r_nom);
+omega_R = (2*v + d_nom*w) ./ (2*r_nom);
+
+
+
+%% Initial conditions
+Q_INIT      = [1; 1; 0];                % Initial pose
+PHI_INIT    = [0; 0];                   % Initial wheels angles
+Q_INIT_LOC  = [1; 1; 0];                % Initial pose for localization
+Z_INIT_EKF  = [1; 1; 0; 0; 0; 0; 0];    % Initial EKF state vector
+
+%k = 0                  % 0 = forward, 1 = backwards
+
+flag_GPS = 1;           % 0 = GPS OFF, 1 = GPS ON
+prob_gps_loss = 0.99;    % 0.0 to 1.0 loss probability for GPS where 0 = no loss; defined p_loss in notes
+%% EKF parameters
+ENCODER_QUANTIZATION = 1;
+
+% EKF initial covariance
+P_INIT_EKF = diag([0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6, 0.0175/6*T_s, 0.0175/6*T_s].^2);
+
+% EKF process noice covariance
+D = diag([0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6, 0.0175/6*T_s, 0.0175/6*T_s].^2);
+
+% EKF measurement noise
+R_2 = diag([ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6].^2);                         %(delta wheels angles)
+R_3 = diag(([0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);                %(GPS(1 value) + delta wheels angles)
+R_4 = diag(([0.001, 0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);         %(GPS(2 values) + delta wheels angles)
+R_5 = diag(([0.001, 0.001, 0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);  %(GPS(3 values) + delta wheels angles)
