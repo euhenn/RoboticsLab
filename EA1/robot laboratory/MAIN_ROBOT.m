@@ -9,7 +9,7 @@ omega_max = 10;
 
 %time
 Ts = 0.04;
-total_time = 35;
+total_time = 40;
 t = 0:Ts:total_time;
 Ta = 1;
 Tc = 30;
