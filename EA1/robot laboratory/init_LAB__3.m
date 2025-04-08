@@ -6,20 +6,24 @@ r = 0.03; % wheel radius
 d = 0.165; % wheel distance 
 a = 1;
 b = 1;
+%%  3.1  Plan a trajectory that brings the robot from the initial configuration 𝑞i to the final configuration 𝑞f using cartesian polynomials (in forward
+%   motion). Choose the time law such that the modules of wheels speeds are
+%   lower then omega_max
 
 %% Definition of the variables we will need in the Simulink
 
-T_SIM = 60;             % simulation time 
+
 t_law = 1;              % choice of timing law (0:constant, 1:trapezoidal)
-T_c = 50;               % constant velocity time (both for constant and trapezoidal time law)         
-T_a = 1;                % acceleration-deceleration time
+Tc = 45;               % constant velocity time (both for constant and trapezoidal time law)         
+Ta = 1;                % acceleration-deceleration time
+T_SIM = 2*Ta + Tc;             % simulation time 
 
 diff_flatness = 0;      % choice of input interpretation (0:cartesian, 1:chained form)
 reorientation = 0;      % in case of chained form, choice of a translation (0:no translation, 1:translation) 
 
-q_i = [-1, -1, pi/2];
-q_f = [ 1,  1, pi/2];
-k_i = 22;
+q_i = [-0.5, -0.5, pi/2];
+q_f = [ 0.5,  0.5, pi/2];
+k_i = 10;
 k_f = 10; 
 k_sign = sign(k_i);
 
@@ -69,3 +73,45 @@ function [y] = planTrajectoryChainedForm(q_i, q_f, reorientation)
     y(2,4) = z_i(2) * (z_f(1) - z_i(1)) + 3 * z_i(3);
 
 end
+
+%%  [☑] 3.2 Test the trajectory in simulation
+
+sim("robot_LAB__3_2.slx")
+
+%%  3.3 Apply the inputs to the actual TurtleBot and compare them with the planned one [keep the robot on its support platform]
+
+%%  3.4 Apply the input to the actual system, collecting data with the motion capture. The file must:
+%   Calibrate data coming from the motion capture (remove offsets)
+%   Run localization algorithm online (both integrations and EKF)
+%   Save measures, commanded inputs, and state estimate
+%   The trajectory estimated by the EKF considering a p_𝑙𝑜𝑠𝑠 = 1, p_𝑙𝑜𝑠𝑠 = 0.99 and p_𝑙𝑜𝑠𝑠 = 0.
+
+
+% Initial conditions
+Q_INIT      = [1; 1; 0];                % Initial pose
+PHI_INIT    = [0; 0];                   % Initial wheels angles
+Q_INIT_LOC  = [1; 1; 0];                % Initial pose for localization
+Z_INIT_EKF  = [1; 1; 0; 0; 0; 0; 0];    % Initial EKF state vector
+
+%k = 0                  % 0 = forward, 1 = backwards
+
+flag_GPS = 1;           % 0 = GPS OFF, 1 = GPS ON
+prob_gps_loss = 0.99;    % 0.0 to 1.0 loss probability for GPS where 0 = no loss; defined p_loss in notes
+%% EKF parameters
+ENCODER_QUANTIZATION = 1;
+
+% EKF initial covariance
+P_INIT_EKF = diag([0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6, 0.0175/6*Ts, 0.0175/6*Ts].^2);
+
+% EKF process noice covariance
+D = diag([0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6, 0.0175/6*Ts, 0.0175/6*Ts].^2);
+
+% EKF measurement noise
+R_2 = diag([ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6].^2);                         %(delta wheels angles)
+R_3 = diag(([0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);                %(GPS(1 value) + delta wheels angles)
+R_4 = diag(([0.001, 0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);         %(GPS(2 values) + delta wheels angles)
+R_5 = diag(([0.001, 0.001, 0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);  %(GPS(3 values) + delta wheels angles)
+
+
+
+%%  3.5 Compare collected results, eventually considering also different velocities.
