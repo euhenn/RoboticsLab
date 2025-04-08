@@ -1,5 +1,5 @@
-% clear all;
-% close all;
+clear all;
+close all;
 addpath('methods');
 load("measurements\Tc_30.mat");
 
@@ -22,7 +22,7 @@ q_off = sim_Tc_30.measures.signals.values(1,1:3)';
 % q4id = reshape(sim_Tc_30.measures.signals.values(:,1:3),3,length(q4id(1,1,:)));
 q4id = sim_Tc_30.measures.signals.values(:,1:3);
 % omega_wheels = reshape(sim_Tc_30.measures.signals.values(:,4:5),2,length(omega_wheels(1,1,:)));
-omega_wheels=sim_Tc_30.measures.signals.values(:,4:5);
+omega_wheels=[sim_Tc_30.measures.signals.values(:,5),sim_Tc_30.measures.signals.values(:,4)];
 t = sim_Tc_30.tout;
 N_samples = size(q4id, 1) - 1;
 %%
