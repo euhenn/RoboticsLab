@@ -1,9 +1,9 @@
 clc
 clear all;
 close all;
-%start from folder robotics labs
-addpath(genpath("methods"));% inport metods
-addpath(genpath("EA1"));% inport folder with code
+
+addpath(genpath("../methods"));% inport metods
+addpath(genpath("../EA1"));% inport folder with code
 %%
 
 %nominal parameters
