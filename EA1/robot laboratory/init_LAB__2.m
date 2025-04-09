@@ -1,6 +1,9 @@
+clc
 clear all;
 close all;
-addpath("methods\");
+%start from folder robotics labs
+addpath(genpath("methods"));% inport metods
+addpath(genpath("EA1"));% inport folder with code
 %%
 
 %nominal parameters
@@ -71,7 +74,7 @@ omega_R = (2*v + d_nom*w) ./ (2*r_nom);
 
 
 %% Initial conditions
-load("measurements\Tc_30.mat");
+load(fullfile("EA1/robot laboratory/measurements/", 'Tc_30.mat'));
 Q_INIT      = sim_Tc_30.measures.signals.values(1,1:3)';                % Initial pose
 PHI_INIT    = [0; 0];                   % Initial wheels angles
 Q_INIT_LOC  = sim_Tc_30.measures.signals.values(1,1:3)';                % Initial pose for localization
