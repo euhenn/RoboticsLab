@@ -1,0 +1,10 @@
+1)scrivere un file che compari i dati ricavati con quelli desiderati e li plotta
+(plot : planned trajectory/actual e confronto tra planned and actual)
+
+2)scrivere un code che confronti la traiettoria nei 3 diversi Tc (ricordarsi di sottrare offset) and n 3 different localization strategies
+
+3) after saving results compare: planned and actual trajectory + trajectory estimted by EFK considering p_loss = 1, = 0.99, =0
+
+
+
+99)Riordinare le cartelle

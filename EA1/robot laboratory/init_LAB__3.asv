@@ -88,7 +88,7 @@ end
 
 %%  [☑] 3.2 Test the trajectory in simulation
 
-% sim("robot_LAB__3_2.slx")
+sim("robot_LAB__3_2.slx")
 
 %%  3.3 Apply the inputs to the actual TurtleBot and compare them with the planned one [keep the robot on its support platform]
 
