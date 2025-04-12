@@ -98,32 +98,71 @@ end
 %   Save measures, commanded inputs, and state estimate
 %   The trajectory estimated by the EKF considering a p_𝑙𝑜𝑠𝑠 = 1, p_𝑙𝑜𝑠𝑠 = 0.99 and p_𝑙𝑜𝑠𝑠 = 0.
 
+prob_gps_loss = 0;    % 0.0 to 1.0 loss probability for GPS where 0 = no loss; defined p_loss in notes
 
-% Initial conditions
-Q_INIT      = [1; 1; 0];                % Initial pose
-PHI_INIT    = [0; 0];                   % Initial wheels angles
-Q_INIT_LOC  = [1; 1; 0];                % Initial pose for localization
-Z_INIT_EKF  = [1; 1; 0; 0; 0; 0; 0];    % Initial EKF state vector
-
-%k = 0                  % 0 = forward, 1 = backwards
-
-flag_GPS = 1;           % 0 = GPS OFF, 1 = GPS ON
-prob_gps_loss = 0.99;    % 0.0 to 1.0 loss probability for GPS where 0 = no loss; defined p_loss in notes
 %% EKF parameters
-ENCODER_QUANTIZATION = 1;
-
+Q_INIT = [-0.5;-0.5;pi/2];
+% Initial EKF state vector
+Z_INIT_EKF  = [-0.5; -0.5; pi/2; 0; 0; 0; 0];
 % EKF initial covariance
 P_INIT_EKF = diag([0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6, 0.0175/6*Ts, 0.0175/6*Ts].^2);
+
+ENCODER_QUANTIZATION = 1;
 
 % EKF process noice covariance
 D = diag([0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6, 0.0175/6*Ts, 0.0175/6*Ts].^2);
 
 % EKF measurement noise
 R_2 = diag([ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6].^2);                         %(delta wheels angles)
-R_3 = diag(([0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);                %(GPS(1 value) + delta wheels angles)
-R_4 = diag(([0.001, 0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);         %(GPS(2 values) + delta wheels angles)
 R_5 = diag(([0.001, 0.001, 0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);  %(GPS(3 values) + delta wheels angles)
 
 
 
 %%  3.5 Compare collected results, eventually considering also different velocities.
+
+
+
+%% 3 OPTIONAL
+% using the messurement took in class
+load("measurements\sim_ult.mat");
+
+% sim with 0% vicon loss
+prob_gps_loss = 0;
+out = sim("robot_LAB__3.slx");
+actual_0 = squeeze(out.get("q_actual").signals.values)';
+planned_0 = squeeze(out.get("q_planned").signals.values)';
+ekf_0 = squeeze(out.get("EKF").signals.values)';
+
+% sim with 99% vicon loss
+prob_gps_loss = 0.99;
+ekf_99 = squeeze(sim("robot_LAB__3.slx").EKF.signals.values)';
+
+% sim with 100% vicon loss
+prob_gps_loss = 1;
+ekf_100 = squeeze(sim("robot_LAB__3.slx").EKF.signals.values)';
+
+%% Plotting
+figure;
+
+% Planned vs actual trajectory
+subplot(2, 2, 1);
+plot(planned_0(:,1), planned_0(:,2), 'r--', 'LineWidth', 1.5); hold on;
+plot(actual_0(:,1), actual_0(:,2), 'b', 'LineWidth', 1.5);
+title('Planned and actual trajectory'); xlabel('X'); ylabel('Y');
+legend('planned', 'actual'); grid on;
+
+% EKF vs actual
+subplot(2, 2, 2);
+plot(ekf_0(:,1), ekf_0(:,2), 'g.', 'MarkerSize', 8); hold on;
+plot(actual_0(:,1), actual_0(:,2), 'b', 'LineWidth', 1.5);
+title('EKF (0% vicon loss)'); xlabel('X'); ylabel('Y'); grid on;
+
+subplot(2, 2, 3);
+plot(ekf_99(:,1), ekf_99(:,2), 'm.', 'MarkerSize', 8); hold on;
+plot(actual_0(:,1), actual_0(:,2), 'b', 'LineWidth', 1.5);
+title('EKF (99% vicon loss)'); xlabel('X'); ylabel('Y'); grid on;
+
+subplot(2, 2, 4);
+plot(ekf_100(:,1), ekf_100(:,2), 'k.', 'MarkerSize', 8); hold on;
+plot(actual_0(:,1), actual_0(:,2), 'b', 'LineWidth', 1.5);
+title('EKF (100% vicon loss)'); xlabel('X'); ylabel('Y'); grid on;
