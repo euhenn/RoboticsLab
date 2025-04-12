@@ -1,6 +1,8 @@
 clear all;
 close all;
-addpath("methods\");
+
+addpath(genpath("../methods"));% inport metods
+addpath(genpath("../EA1"));% inport folder with code
 %%
 %nominal parameters
 r_nom = 0.03;
