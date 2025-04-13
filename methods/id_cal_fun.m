@@ -47,7 +47,28 @@ function [hat]=id_cal(q_m,w_m,Ts,t,unwarp,calibration)
         delta_theta_cal_hat = Y_cal_hat(2*N_samples+1:3*N_samples);
 
     end
-%da finire
+
+    %da inserire output funzione
+
+    % compute error statistics
+    E_X = delta_X-delta_X_cal_hat;
+    mean_E_X = mean(E_X);
+    std_E_X = std(E_X);
+    std_X = std(delta_X);
+
+    % compute error statistics
+    E_Y = delta_Y-delta_Y_cal_hat;
+    mean_E_Y = mean(E_Y);
+    std_E_Y = std(E_Y);
+    std_Y = std(delta_Y);
+
+    % compute error statistics
+    E_theta = delta_theta-delta_theta_cal_hat;
+    mean_E_theta = mean(E_theta);
+    std_E_theta = std(E_theta);
+    std_theta = std(delta_theta);
+    
+    
 
     %plot meausre
     figure()
@@ -59,4 +80,43 @@ function [hat]=id_cal(q_m,w_m,Ts,t,unwarp,calibration)
     hold on
     plot(t(2:end), w_m(2:end,2), 'LineWidth', 3, 'Color','r')
     grid on;
+
+    % plot X estimates
+    figure()
+    subplot(3,1,1)
+    plot(t(2:end), delta_X, 'LineWidth', 3, 'Color','g')
+    xlim([0,t(end)])
+    hold on
+    grid on
+    xlabel('Steps')
+    ylabel('\delta X [m]')
+    plot(t(2:end), delta_X_unconstrained_hat(1:N_samples), 'LineWidth', 1.5, 'Color', 'r')
+    plot(t(2:end), delta_X_cal_hat(1:N_samples), 'LineWidth', 1.5, 'Color', 'b')
+    legend('\delta X', '\delta X ID', '\delta X ID + CAL')
+    
+    % plot Y estimates
+    subplot(3,1,2)
+    plot(t(2:end), delta_Y, 'LineWidth', 3, 'Color','g')
+    xlim([0,t(end)])
+    hold on
+    grid on
+    plot(t(2:end), delta_Y_unconstrained_hat, 'LineWidth', 1.5, 'Color', 'r')
+    plot(t(2:end), delta_Y_cal_hat, 'LineWidth', 1.5, 'Color', 'b')
+    legend('\delta Y', '\delta Y ID', '\delta Y ID + CAL')
+    xlabel('Steps')
+    ylabel('\delta Y [m]')
+    
+    
+    % plot theta estimates
+    subplot(3,1,3)
+    plot(t(2:end), delta_theta, 'LineWidth', 3, 'Color','g')
+    xlim([0,t(end)])
+    hold on
+    grid on
+    plot(t(2:end), delta_theta_unconstrained_hat, 'LineWidth', 1.5, 'Color', 'r')
+    plot(t(2:end), delta_theta_cal_hat, 'LineWidth', 1.5, 'Color', 'b')
+    legend('\delta \theta', '\delta \theta ID', '\delta \theta ID + CAL')
+    xlabel('Steps')
+    ylabel('\delta \theta [rad]')
+    
 end
