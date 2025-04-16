@@ -1,5 +1,5 @@
-function [x, y,x_dot,y_dot,x_ddot,y_ddot] = cartesian_polyn(qi, qf, s, ki, kf)
-    % s as vector like 0:0.1:1
+function [x, y,x_dot,y_dot,x_ddot,y_ddot] =Path_planning_cartesian(qi, qf, s, ki, kf)
+    % s as vector like 0:0.1:1000
     %evaluate the weight as written in the slide
     a1 = qf(1);
     a2 = qi(1);
