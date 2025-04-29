@@ -16,9 +16,9 @@ omega_M = 12;
 controller_index = 2; % 1->cartesian, 2->posture
 flg_replanning = true;
 % desired configuration
-q_d = [0;0;0];
+q_d = [2;2;0];
 % initial configuration
-Q_INIT = [1;1;0];
+Q_INIT = [0;0;0];
 % simulation time
 T_SIM = 10;
 
