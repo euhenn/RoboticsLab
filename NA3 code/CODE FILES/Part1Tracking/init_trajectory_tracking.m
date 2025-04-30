@@ -12,8 +12,8 @@ d_actual = d_nominal;
 % d_actual = 0.1694;
 omega_M = 12;
 
-controller_index = 3; % 1->lin, 2->nonlin, 3->FL
-trj_index = 1;% 1->line, 2->circle, 3->square, 4->8-shaped
+controller_index = 1; % 1->lin, 2->nonlin, 3->FL
+trj_index = 2;% 1->line, 2->circle, 3->square, 4->8-shaped
 %problema controller 2
 % --- line (1/T_trj [m/s] along the Y axis)
 if trj_index == 1
