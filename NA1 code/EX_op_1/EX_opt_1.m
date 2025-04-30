@@ -1,8 +1,8 @@
 %% Definition of the parameters 
 r = 0.03; % wheel radius 
 d = 0.165; % wheel distance 
-a = 0;
-b = 2;
+v_d = 0;
+w_d = 2;
 
 x_0 = 1;
 y_0 = 1;
