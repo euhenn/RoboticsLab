@@ -64,6 +64,7 @@ Z_INIT_EKF = [0; 0; 0; 0; 0; 0; 0];
 
 PHI_INIT = [0; 0];
 sim("dummy.slx")
+save("data_Euler.mat","data_Euler");
 %%
 
 figure(1);
