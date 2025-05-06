@@ -3,7 +3,8 @@ close all;
 addpath(genpath('utils'));
 
 %% Set simulation parameters
-
+Ts = 0.04;
+T_s = 0.04;
 %if we are online w/ EKF
 ekf_online = 1;
 
@@ -24,11 +25,23 @@ q_d = [2;2;0];
 % initial configuration
 Q_INIT = [0;0;0];
 % simulation time
-T_SIM = 10;
+T_SIM = 20;
 
-P_INIT_EKF    = [0; 0];                   % Initial wheels angles
+
+%% EKF parameters
+ENCODER_QUANTIZATION = 1;
+prob_gps_loss = 0;    % 0.0 to 1.0 loss probability for GPS where 0 = no loss; defined p_loss in notes
+% EKF initial covariance
+P_INIT_EKF = diag([0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6, 0.0175/6*Ts, 0.0175/6*Ts].^2);
+
+% EKF process noice covariance
+D = diag([0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6, 0.0175/6*Ts, 0.0175/6*Ts].^2);
+
 Z_INIT_EKF  = [Q_INIT; 0; 0; 0; 0];    % Initial EKF state vector
 
+% EKF measurement noise
+R_2 = diag([ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6].^2);                         %(delta wheels angles)
+R_5 = diag(([0.001, 0.001, 0.001, ENCODER_QUANTIZATION/6,ENCODER_QUANTIZATION/6]).^2);  %(GPS(3 values) + delta wheels angles)
 
 %% Set controller parameters
 if controller_index == 1
@@ -38,9 +51,9 @@ if controller_index == 1
     control_par = [k_1, k_2, 0];
 else
     % posture
-    k_1 = 10; 
-    k_2 = 10;
-    k_3 = 1;
+    k_1 = 1; 
+    k_2 = 1;
+    k_3 = 0.1;
     control_par = [k_1, k_2, k_3];
 end
 
