@@ -3,6 +3,10 @@ close all;
 addpath(genpath('utils'));
 
 %% Set simulation parameters
+
+%if we are online w/ EKF
+ekf_online = 1;
+
 r_nominal = 0.03;
 d_nominal = 0.165;
 r = r_nominal;
@@ -13,14 +17,18 @@ d_actual = d_nominal;
 % d_actual = 0.1694;
 omega_M = 12;
 
-controller_index = 1; % 1->cartesian, 2->posture
+controller_index = 2; % 1->cartesian, 2->posture
 flg_replanning = true;
 % desired configuration
 q_d = [2;2;0];
 % initial configuration
 Q_INIT = [0;0;0];
 % simulation time
-T_SIM = 20;
+T_SIM = 10;
+
+P_INIT_EKF    = [0; 0];                   % Initial wheels angles
+Z_INIT_EKF  = [Q_INIT; 0; 0; 0; 0];    % Initial EKF state vector
+
 
 %% Set controller parameters
 if controller_index == 1
@@ -35,3 +43,4 @@ else
     k_3 = 1;
     control_par = [k_1, k_2, k_3];
 end
+
