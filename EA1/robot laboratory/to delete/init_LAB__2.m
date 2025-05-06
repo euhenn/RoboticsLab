@@ -2,13 +2,16 @@ clc
 clear all;
 close all;
 
-addpath(genpath("../methods"));% inport metods
-addpath(genpath("../EA1"));% inport folder with code
+addpath(genpath("../../../methods"));% inport metods
+addpath(genpath("../../../EA1"));% inport folder with code
 %%
 
 %nominal parameters
 r_nom = 0.03;
 d_nom = 0.165;
+r_nom = 0.0326;
+d_nom = 0.169;
+
 omega_max = 10;
 
 %time
@@ -37,9 +40,9 @@ y_dot = R*omega_trj*cos(omega_trj*s);
 x_ddot = R*4*omega_trj*omega_trj*(-sin(2*omega_trj*s));
 y_ddot = R*omega_trj*omega_trj*(-sin(omega_trj*s));
 
-% %% simulation
-% sim("robot_LAB__1_3.slx");
-
+%% simulation
+sim("robot_LAB__1_3.slx");
+save("post_id_report.mat","out");
 %   v
 v = s_dot.*sqrt(y_dot.^2 + x_dot.^2);
 
@@ -52,11 +55,11 @@ omega_R = (2*v + d_nom*w) ./ (2*r_nom);
 
 %%  [☑] 1.8 Run the experiment with different control law configurations ️
 
-% Tc=30;
-% total_time = 2*Ta + Tc;
-% t = 0:Ts:total_time;
-% out = sim('robot_LAB__2.slx');
-% sim_Tc_30=out;
+Tc=30;
+total_time = 2*Ta + Tc;
+t = 0:Ts:total_time;
+out = sim('robot_LAB__2.slx');
+sim_Tc_30=out;
 % 
 % 
 % Tc=18;
