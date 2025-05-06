@@ -1,9 +1,6 @@
-clc
 clear all;
 close all;
-
-addpath(genpath("../methods"));% inport metods
-addpath(genpath("../EA1"));% inport folder with code
+addpath("methods\");
 %%
 
 %nominal parameters
@@ -74,11 +71,11 @@ omega_R = (2*v + d_nom*w) ./ (2*r_nom);
 
 
 %% Initial conditions
-load(fullfile("EA1/robot laboratory/measurements/", 'Tc_30.mat'));
-Q_INIT      = sim_Tc_30.measures.signals.values(1,1:3)';                % Initial pose
+load("measurements\Tc_30.mat");
+Q_INIT      = sim_Tc_30.measures.signals.values(:,1:3)';                % Initial pose
 PHI_INIT    = [0; 0];                   % Initial wheels angles
-Q_INIT_LOC  = sim_Tc_30.measures.signals.values(1,1:3)';                % Initial pose for localization
-Z_INIT_EKF  = [sim_Tc_30.measures.signals.values(1,1:3)'; 0; 0; 0; 0];    % Initial EKF state vector
+Q_INIT_LOC  = [1; 1; 0];                % Initial pose for localization
+Z_INIT_EKF  = [1; 1; 0; 0; 0; 0; 0];    % Initial EKF state vector
 
 %k = 0                  % 0 = forward, 1 = backwards
 
@@ -122,5 +119,3 @@ fprintf('Mean error Theta: %.4f, Std: %.4f, Original Std: %.4f\n', mean_E_theta,
 %%  2.2 Test Locatization strategies (integration and EFK) by simulating collected data. 
 % In the EKF consider also possible measurement loss. 
 % Simulate all the time law configurations and evaluate eventual differences.
-d = d_nom;
-r = r_nom;

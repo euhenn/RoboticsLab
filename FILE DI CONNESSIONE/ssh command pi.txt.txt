@@ -1,1 +1,0 @@
-TURTLEBOT=turtlebot roslaunch sparcs_turtlebot turtlebot.launch number:=07 rosserial:=true camera:=false lidar:=true vicon:=false
