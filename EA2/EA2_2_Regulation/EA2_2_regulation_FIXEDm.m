@@ -16,7 +16,7 @@ r_actual = r_nominal;
 d_actual = d_nominal;
 % r_actual = 0.0302;
 % d_actual = 0.1694;
-omega_M = 12;
+omega_M = 10;
 
 controller_index = 2; % 1->cartesian, 2->posture
 flg_replanning = true;
@@ -26,7 +26,7 @@ q_d = [2;2;0];
 Q_INIT = [0;0;0];
 % simulation time
 T_SIM = 20;
-
+w_max=10;
 
 %% EKF parameters
 %ekf settings
