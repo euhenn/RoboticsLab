@@ -617,7 +617,7 @@ prob_gps_loss=0.9;
 %rerun 1.7
 %% 1.8.3
 %change p loss
-prob_gps_loss=0.9;
+prob_gps_loss=0.99;
 
 %rerun 1.7
 
