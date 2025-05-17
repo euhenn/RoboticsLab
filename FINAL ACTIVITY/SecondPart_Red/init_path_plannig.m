@@ -23,8 +23,12 @@ d_actual = d_nominal;
 % r_actual = 0.0302;
 % d_actual = 0.1694;
 
-qi = [-1.6;-1.1;0];
-qf = [1;-0.3;0];
+%   positions
+x = [-2.90, -1.60, -1.50, -1.40, -0.60, 0.20, 1.00, 1.45, 1.80, 2.20, 2.90];
+y = [-1.50, -1.10, -0.70, -0.30, -0.20, 0.10, 0.20, 1.50];
+
+qi = [x(2);y(2);0];
+qf = [x(7);y(4);0];
 controller_index = 3;
 ki = 4;
 kf = 3;
@@ -64,3 +68,7 @@ elseif controller_index ==3
     b = 0.1;
     control_par = [k1, k2,b];
 end
+
+%%  plotting
+addpath(genpath('..\graphs'));
+plotter_pose_xyth(pose_xyth);
