@@ -23,9 +23,7 @@ y = [-1.50, -1.10, -0.70, -0.30, -0.20, 0.10, 0.20, 1.50];
 % desired configuration
 q_d = [x(2);y(2);0];
 % initial configuration
-starting_variable_x = rand;
-starting_variable_y = rand;
-Q_INIT = [x(1)+0.2+starting_variable_x;y(8)-starting_variable_y;-pi/2];
+Q_INIT = [x(1)+0.5;y(8)-0.5;-pi/2];
 
 %% EKF parameters
 p_loss = 0;    % 0.0 to 1.0 loss probability for GPS where 0 = no loss; defined p_loss in note
@@ -34,7 +32,7 @@ ENCODER_QUANTIZATION = 1;
 Z_INIT_EKF  = [Q_INIT; 0; 0; 0; 0];    % Initial EKF state vector
 
 % EKF initial covariance
-P_INIT_EKF = diag([0.001, 0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6*T_s, 0.0175/6*T_s].^2);
+P_INIT_EKF = diag([0.101, 0.101, 0.101, 0.0175/6, 0.0175/6, 0.0175/6*T_s, 0.0175/6*T_s].^2);
 
 % EKF process noice covariance
 D = diag([0.001, 0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6*T_s, 0.0175/6*T_s].^2);

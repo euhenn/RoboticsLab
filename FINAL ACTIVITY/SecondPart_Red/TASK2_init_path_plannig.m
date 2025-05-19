@@ -39,7 +39,7 @@ ENCODER_QUANTIZATION = 1;
 Z_INIT_EKF  = [qi; 0; 0; 0; 0];    % Initial EKF state vector
 
 % EKF initial covariance
-P_INIT_EKF = diag([0.001, 0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6*T_s, 0.0175/6*T_s].^2);
+P_INIT_EKF = diag([0.101, 0.101, 0.101, 0.0175/6, 0.0175/6, 0.0175/6*T_s, 0.0175/6*T_s].^2);
 
 % EKF process noice covariance
 D = diag([0.001, 0.001, 0.001, 0.0175/6, 0.0175/6, 0.0175/6*T_s, 0.0175/6*T_s].^2);
